@@ -1,66 +1,78 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux'; 
 import { RootState } from '../redux/store/store'; 
-import { deleteFormData } from '../redux/slice/formDataSlice'; // L'action de suppression si nécessaire
+import { deleteEmployee } from '../redux/slice/formDataSlice'; 
+import { Link } from 'react-router-dom'; 
+import '../style/TablePage.css';
 
-// Définition du type pour les données du formulaire
-interface FormData {
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string | null;
-  startDate: string | null;
-  selectedState: string;
-  selectedDepartment: string;
-}
+const TablePage = () => {
+  const employees = useSelector((state: RootState) => state.formData.employees);
+  console.log("Employés récupérés depuis le store :", employees);
+  const dispatch = useDispatch();
 
-const TablePage: React.FC = () => {
-  const formData = useSelector((state: RootState) => state.formData); // Récupère les données depuis Redux
-  const dispatch = useDispatch(); // Utilisation de dispatch pour supprimer les données
-
-  const handleDelete = (index: number) => {
-    dispatch(deleteFormData(index)); // Appel à l'action de suppression
+  // Fonction pour formater les dates
+  const formatDate = (date: string) => {
+    const formattedDate = new Date(date).toLocaleDateString('en-GB'); 
+    return formattedDate;
   };
 
-  const handleEdit = (index: number) => {
-    // Logique pour l'édition de l'élément
-    console.log('Edit item at index:', index);
+  const handleDelete = (index: number) => {
+    dispatch(deleteEmployee(index)); // Supprime l'employé à l'index spécifié
   };
 
   return (
     <div className="table-container">
-      <h2>Form Data Table</h2>
-      <table>
+      <h1>Employee Table</h1>
+      
+      {/* Lien pour revenir à la page du formulaire */}
+      <Link to="/" className="back-link">
+        Back to Form
+      </Link>
+
+      <table className="table">
         <thead>
           <tr>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Date of Birth</th>
             <th>Start Date</th>
+            <th>Street</th>
+            <th>City</th>
             <th>State</th>
+            <th>ZIP</th>
             <th>Department</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {formData.map((data: FormData, index: number) => (
-            <tr key={index}>
-              <td>{data.firstName}</td>
-              <td>{data.lastName}</td>
-              <td>{data.dateOfBirth || 'N/A'}</td>
-              <td>{data.startDate || 'N/A'}</td>
-              <td>{data.selectedState}</td>
-              <td>{data.selectedDepartment}</td>
-              <td>
-                <button onClick={() => handleEdit(index)}>Edit</button>
-                <button onClick={() => handleDelete(index)}>Delete</button>
-              </td>
+          {employees.length > 0 ? (
+            employees.map((employee, index) => {
+              return (
+                <tr key={index}>
+                  <td>{employee.firstName}</td>
+                  <td>{employee.lastName}</td>
+                  <td>{formatDate(employee.dateOfBirth)}</td> 
+                  <td>{formatDate(employee.startDate)}</td> 
+                  <td>{employee.street}</td> 
+                  <td>{employee.city}</td> 
+                  <td>{employee.selectedState}</td> 
+                  <td>{employee.zip}</td> 
+                  <td>{employee.selectedDepartment}</td> 
+                  <td>
+                    {/* Bouton Delete pour supprimer l'employé */}
+                    <button className="action-button" onClick={() => handleDelete(index)}>
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td>No employees found</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
-
-      <Link to="/" className="back-link">Back to Form</Link>
     </div>
   );
 };

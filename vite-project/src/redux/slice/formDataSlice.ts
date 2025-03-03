@@ -1,30 +1,39 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface FormData {
+interface Employee {
   firstName: string;
   lastName: string;
-  dateOfBirth: string | null;
-  startDate: string | null;
+  dateOfBirth: string;
+  startDate: string;
+  street: string;
+  city: string;
+  zip: string;
   selectedState: string;
   selectedDepartment: string;
 }
 
-const initialState: FormData[] = [];
+interface FormDataState {
+  employees: Employee[];
+}
+
+const initialState: FormDataState = {
+  employees: [],
+};
 
 const formDataSlice = createSlice({
   name: 'formData',
   initialState,
   reducers: {
-    addFormData: (state, action: PayloadAction<FormData>) => {
-      state.push(action.payload);
+    addFormData: (state, action: PayloadAction<Employee>) => {
+        console.log("Données ajoutées : ", action.payload); 
+        state.employees.push(action.payload);
+      },
+    deleteEmployee(state, action: PayloadAction<number>) {
+      state.employees = state.employees.filter((_, index) => index !== action.payload);
     },
-    deleteFormData: (state, action: PayloadAction<number>) => {
-      state.splice(action.payload, 1); // Supprime l'élément à l'index spécifié
-    },
-    resetFormData: () => initialState,
   },
 });
 
-export const { addFormData, deleteFormData } = formDataSlice.actions;
+export const { addFormData, deleteEmployee } = formDataSlice.actions;
 
 export default formDataSlice.reducer;
