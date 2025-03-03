@@ -1,6 +1,9 @@
 import { useState } from 'react';
-import DataInput from './components/Datainput.jsx';
-import Modal from './components/Modal.jsx';
+import { useDispatch } from 'react-redux'; // Importer useDispatch
+import { addFormData } from './redux/slice/formDataSlice'; // Importer l'action
+import { Link } from 'react-router-dom'; // Importer Link
+import DataInput from './components/Datainput';
+import Modal from './components/Modal';
 import CustomDatePicker from './components/DatePicker';
 import Dropdown from './components/Dropdown';
 import './App.css';
@@ -28,8 +31,10 @@ const App = () => {
   });
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [startDate, setStartDate] = useState(null);
-  const [selectedState, setSelectedState] = useState(US_STATES[0]); // Par défaut, le premier état
-  const [selectedDepartment, setSelectedDepartment] = useState(DEPARTMENTS[0]); // Par défaut, le premier département
+  const [selectedState, setSelectedState] = useState(US_STATES[0]);
+  const [selectedDepartment, setSelectedDepartment] = useState(DEPARTMENTS[0]);
+
+  const dispatch = useDispatch(); // Utiliser useDispatch pour envoyer l'action
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -40,36 +45,48 @@ const App = () => {
   };
 
   const handleSave = () => {
-    console.log({
-      ...inputValues,
+    const formData = {
+      firstName: inputValues.firstName,
+      lastName: inputValues.lastName,
       dateOfBirth,
       startDate,
       selectedState,
       selectedDepartment,
-    });
+    };
+
+    // Dispatch l'action pour ajouter les données dans le store
+    dispatch(addFormData(formData));
+
+    // Afficher le modal
     setModalOpen(true);
   };
 
   return (
     <div className="app-container">
+      <Link to="/table" className="link-to-table">
+        Go to Table Page
+      </Link>
+
       <h1 className="app-title">Mon Application</h1>
 
       <div className="form-container">
         {/* Composants de saisie */}
-        <DataInput
-          id="first"
-          type="text"
-          name="firstName"
-          label="FIRST NAME"
-          onChange={handleInputChange}
-        />
-        <DataInput
-          id="last"
-          type="text"
-          name="lastName"
-          label="LAST NAME"
-          onChange={handleInputChange}
-        />
+        <div className="input-section">
+          <DataInput
+            id="first"
+            type="text"
+            name="firstName"
+            label="FIRST NAME"
+            onChange={handleInputChange}
+          />
+          <DataInput
+            id="last"
+            type="text"
+            name="lastName"
+            label="LAST NAME"
+            onChange={handleInputChange}
+          />
+        </div>
 
         {/* Sélecteur de date pour la Date of Birth */}
         <div className="date-section">
@@ -86,20 +103,22 @@ const App = () => {
         {/* Adresse */}
         <div className="address-section">
           <h3 className="section-title">Address</h3>
-          <DataInput
-            id="street"
-            type="text"
-            name="street"
-            label="STREET"
-            onChange={handleInputChange}
-          />
-          <DataInput
-            id="city"
-            type="text"
-            name="city"
-            label="CITY"
-            onChange={handleInputChange}
-          />
+          <div className="input-section">
+            <DataInput
+              id="street"
+              type="text"
+              name="street"
+              label="STREET"
+              onChange={handleInputChange}
+            />
+            <DataInput
+              id="city"
+              type="text"
+              name="city"
+              label="CITY"
+              onChange={handleInputChange}
+            />
+          </div>
           {/* Dropdown pour les États */}
           <div className="dropdown">
             <Dropdown
@@ -108,13 +127,15 @@ const App = () => {
               onChange={setSelectedState}
             />
           </div>
-          <DataInput
-            id="zip"
-            type="text"
-            name="zip"
-            label="ZIP CODE"
-            onChange={handleInputChange}
-          />
+          <div className="input-section">
+            <DataInput
+              id="zip"
+              type="text"
+              name="zip"
+              label="ZIP CODE"
+              onChange={handleInputChange}
+            />
+          </div>
         </div>
 
         {/* Dropdown pour les Départements */}

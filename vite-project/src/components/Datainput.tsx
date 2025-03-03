@@ -1,4 +1,4 @@
-import '../style/DataInput.css';
+
 
 type DataInputProps = {
   id: string;

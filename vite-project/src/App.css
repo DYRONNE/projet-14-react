@@ -2,96 +2,144 @@
 
 /* Global Styles */
 body {
-  font-family: 'Roboto', Arial, sans-serif;
-  background-color: #f9fafb; 
-  color: #333; 
+  font-family: 'Poppins', Arial, sans-serif;
+  background-color: #f4f7fc; /* Couleur douce pour le fond */
+  color: #2d3436;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 h1 {
-  font-size: 2rem;
-  color: #2c3e50; 
+  font-size: 2.5rem;
+  color: #34495e; /* Couleur sombre pour le titre */
   text-align: center;
   margin-bottom: 1.5rem;
 }
 
-/* Form Container */
-div {
-  width: 90%;
+/* App Container */
+.app-container {
+  padding: 2rem;
   max-width: 800px;
   margin: 0 auto;
-  background-color: #ffffff; 
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Container */
+.form-container {
+  background: #ffffff; /* Blanc pour le contraste */
   padding: 2rem;
-  margin-top: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Ombre douce */
+}
+
+/* Sections */
+.input-section,
+.date-section,
+.address-section,
+.dropdown {
+  margin-bottom: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  color: #2d3436;
+  margin-bottom: 0.8rem;
 }
 
 /* Inputs and Labels */
 label {
   font-size: 0.9rem;
-  color: #555;
-  margin-bottom: 0.5rem;
+  color: #636e72;
+  margin-bottom: 0.4rem;
   display: block;
 }
 
 input[type="text"] {
   width: 100%;
   padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  margin-bottom: 1rem;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
   outline: none;
-  transition: border 0.2s;
+  transition: all 0.3s ease;
 }
 
 input[type="text"]:focus {
-  border: 1px solid #3498db; 
+  border: 1px solid #0984e3; /* Couleur d'accent */
+  box-shadow: 0 0 4px rgba(9, 132, 227, 0.4);
 }
-
-
 
 /* Dropdown */
-.dropdown {
-  margin-bottom: 1rem;
-}
-
 .dropdown select {
   width: 100%;
   padding: 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 1rem;
   background-color: #fff;
   outline: none;
-  transition: border 0.2s;
+  transition: border 0.3s ease;
 }
 
 .dropdown select:focus {
-  border: 1px solid #3498db; 
+  border: 1px solid #0984e3;
+  box-shadow: 0 0 4px rgba(9, 132, 227, 0.4);
 }
 
 /* Button */
-button {
-  background-color: #3498db;
+.btn-save {
+  display: block;
+  margin: 2rem auto 0;
+  background-color: #00cec9; /* Couleur vive pour le bouton */
   color: #fff;
   font-size: 1rem;
-  padding: 0.8rem 1.2rem;
+  padding: 0.8rem 2rem;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
-button:hover {
-  background-color: #2980b9; 
+.btn-save:hover {
+  background-color: #00b894;
+  transform: scale(1.05);
 }
 
-button:active {
-  background-color: #2471a3;
+.btn-save:active {
+  background-color: #019875;
+  transform: scale(1);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 }
 
 
+
+/* Additional Styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.datepicker-input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #dfe6e9;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.datepicker-input:focus {
+  border: 1px solid #0984e3;
+  box-shadow: 0 0 4px rgba(9, 132, 227, 0.4);
+}
