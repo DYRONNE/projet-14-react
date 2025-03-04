@@ -1,6 +1,6 @@
-import { Routes, Route } from 'react-router-dom'; 
-import FormPage from './pages/FormPage'; 
-import TablePage from './pages/TablePage'; 
+import { Routes, Route } from "react-router-dom";
+import FormPage from "./pages/FormPage";
+import TablePage from "./pages/TablePage";
 
 const App = () => {
   return (
