@@ -9,11 +9,15 @@ const TablePage = () => {
   const employees = useSelector((state: RootState) => state.formData.employees);
   const dispatch = useDispatch();
 
-  const [filterText, setFilterText] = useState(''); // État pour le filtre
-  const [entriesPerPage, setEntriesPerPage] = useState(10); // Nombre d'entrées par page
-  const [currentPage, setCurrentPage] = useState(1); // Page actuelle
+  const [filterText, setFilterText] = useState('');
+  const [entriesPerPage, setEntriesPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Fonction pour formater les dates
+  const [sortConfig, setSortConfig] = useState<{ key: string | null; direction: string | null }>({
+    key: null,
+    direction: null,
+  });
+
   const formatDate = (date: string) => {
     const formattedDate = new Date(date).toLocaleDateString('en-GB');
     return formattedDate;
@@ -23,7 +27,6 @@ const TablePage = () => {
     dispatch(deleteEmployee(index));
   };
 
-  // Filtrer les employés en fonction du texte saisi
   const filteredEmployees = employees.filter(
     (employee) =>
       employee.firstName.toLowerCase().includes(filterText.toLowerCase()) ||
@@ -32,23 +35,50 @@ const TablePage = () => {
       employee.selectedDepartment.toLowerCase().includes(filterText.toLowerCase())
   );
 
-  // Calcul des données pour la pagination
+  const handleSort = (key: string) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedEmployees = [...filteredEmployees].sort((a, b) => {
+    const aValue = a[sortConfig.key as keyof typeof a];
+    const bValue = b[sortConfig.key as keyof typeof b];
+
+    if (sortConfig.direction === 'ascending') {
+      return typeof aValue === 'string'
+        ? aValue.localeCompare(bValue)
+        : aValue - bValue;
+    } else {
+      return typeof bValue === 'string'
+        ? bValue.localeCompare(aValue)
+        : bValue - aValue;
+    }
+  });
+
   const startIndex = (currentPage - 1) * entriesPerPage;
   const endIndex = startIndex + entriesPerPage;
-  const paginatedEmployees = filteredEmployees.slice(startIndex, endIndex);
+  const paginatedEmployees = sortedEmployees.slice(startIndex, endIndex);
 
   const totalPages = Math.ceil(filteredEmployees.length / entriesPerPage);
+
+  const getSortArrow = (key: string) => {
+    if (sortConfig.key === key) {
+      return sortConfig.direction === 'ascending' ? '▲' : '▼';
+    }
+    return '';
+  };
 
   return (
     <div className="table-container">
       <h1>Current Employees</h1>
 
-      {/* Lien pour revenir à la page du formulaire */}
       <Link to="/" className="back-link">
         Back to Form
       </Link>
 
-      {/* Input pour le filtre */}
       <div className="filter-container">
         <label htmlFor="filter">Filter: </label>
         <input
@@ -57,13 +87,12 @@ const TablePage = () => {
           value={filterText}
           onChange={(e) => {
             setFilterText(e.target.value);
-            setCurrentPage(1); // Réinitialiser à la première page après un filtre
+            setCurrentPage(1); // Reset to first page when filtering
           }}
           placeholder="Search employees..."
         />
       </div>
 
-      {/* Sélecteur pour le nombre d'entrées par page */}
       <div className="pagination-controls">
         <label htmlFor="entriesPerPage">Show </label>
         <select
@@ -71,7 +100,7 @@ const TablePage = () => {
           value={entriesPerPage}
           onChange={(e) => {
             setEntriesPerPage(Number(e.target.value));
-            setCurrentPage(1); // Réinitialiser à la première page
+            setCurrentPage(1); // Reset to first page
           }}
         >
           <option value={10}>10</option>
@@ -82,14 +111,21 @@ const TablePage = () => {
         <span> entries</span>
       </div>
 
-      {/* Tableau des employés */}
       <table className="table">
         <thead>
           <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Date of Birth</th>
-            <th>Start Date</th>
+            <th onClick={() => handleSort('firstName')}>
+              First Name {getSortArrow('firstName')}
+            </th>
+            <th onClick={() => handleSort('lastName')}>
+              Last Name {getSortArrow('lastName')}
+            </th>
+            <th onClick={() => handleSort('dateOfBirth')}>
+              Date of Birth {getSortArrow('dateOfBirth')}
+            </th>
+            <th onClick={() => handleSort('startDate')}>
+              Start Date {getSortArrow('startDate')}
+            </th>
             <th>Street</th>
             <th>City</th>
             <th>State</th>
@@ -129,7 +165,6 @@ const TablePage = () => {
         </tbody>
       </table>
 
-      {/* Compteur et pagination */}
       <div className="table-footer">
         <p>
           Showing {startIndex + 1} to {Math.min(endIndex, filteredEmployees.length)} of{' '}

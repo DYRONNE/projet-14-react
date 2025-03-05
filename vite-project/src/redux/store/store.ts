@@ -5,7 +5,7 @@ import formDataReducer from '../slice/formDataSlice'; // Importe le reducer du s
 // Créer le store avec le reducer du formData
 export const store = configureStore({
   reducer: {
-    formData: formDataReducer, // Le nom 'formData' sera l'accès à l'état dans le store
+    formData: formDataReducer,
   },
 });
 
