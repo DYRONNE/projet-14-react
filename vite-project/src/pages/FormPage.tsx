@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import DataInput from '../components/Datainput';
 import Modal from '../components/Modal';
 import CustomDatePicker from '../components/DatePicker';
-import Dropdown from '../components/Dropdown';
+import CustomDropdown from "dylanronne-react-custom-dropdown";
 import '../style/FormPage.css';
 
 const US_STATES = [
@@ -130,7 +130,7 @@ const FormPage = () => {
             </div>
             {/* Dropdown pour les États */}
             <div className="dropdown">
-              <Dropdown
+              <CustomDropdown
                 label="Select State"
                 options={US_STATES}
                 onChange={setSelectedState}
@@ -149,7 +149,7 @@ const FormPage = () => {
 
           {/* Dropdown pour les Départements */}
           <div className="dropdown">
-            <Dropdown
+            <CustomDropdown
               label="Select Department"
               options={DEPARTMENTS}
               onChange={setSelectedDepartment}

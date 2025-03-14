@@ -1,6 +1,6 @@
 {
   "name": "dylanronne-react-custom-dropdown",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A customizable dropdown component for React.",
   "main": "index.tsx",
   "scripts": {
